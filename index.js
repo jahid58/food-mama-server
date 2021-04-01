@@ -10,11 +10,11 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors());
 require('dotenv').config()
 
-const uri = `mongodb+srv://${process.DB_USER}:${process.DB_PASS}@cluster0.ntakd.mongodb.net/${process.DB_HOST}?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ntakd.mongodb.net/${process.env.DB_HOST}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
-  const foodCollection = client.db(process.DB_HOST).collection("foods");
-  const orderedCollection = client.db(process.DB_HOST).collection('orders');
+  const foodCollection = client.db(process.env.DB_HOST).collection("foods");
+  const orderedCollection = client.db(process.env.DB_HOST).collection('orders');
 app.post('/addFood',(req,res)=>{
     const food = req.body;
     foodCollection.insertOne(food)
