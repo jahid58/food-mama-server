@@ -1,8 +1,53 @@
-const express = ('express');
-const cors = ('cors');
-const bodyParser = ('body-parser');
-const app =express();
-const port = process.DB_PORT || 5000;
-app.use(cors);
-app.use(bodyParser);
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors') 
+const app =express()
+const MongoClient = require('mongodb').MongoClient
+const ObjectID = require('mongodb').ObjectID;
+const port = process.env.DB_PORT || 5000;
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cors());
+require('dotenv').config()
+
+const uri = `mongodb+srv://${process.DB_USER}:${process.DB_PASS}@cluster0.ntakd.mongodb.net/${process.DB_HOST}?retryWrites=true&w=majority`;
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+client.connect(err => {
+  const foodCollection = client.db(process.DB_HOST).collection("foods");
+  const orderedCollection = client.db(process.DB_HOST).collection('orders');
+app.post('/addFood',(req,res)=>{
+    const food = req.body;
+    foodCollection.insertOne(food)
+    .then(result=>res.send(result.insertedCount > 0))
+})
+app.get('/getFoods',(req,res)=>{
+    foodCollection.find({})
+  .toArray((err,documents)=>{
+    res.send(documents)
+  })
+})
+app.get('/checkedItem/:id',(req,res)=>{
+    const id = ObjectID(req.params.id);
+    foodCollection.find({_id:id})
+    .toArray((err,documents)=>{
+        res.send(documents[0])
+    })
+})
+app.post('/orderedInfo',(req,res)=>{
+    const ordered = req.body;
+    orderedCollection.insertOne(ordered)
+    .then(result=>{
+       res.send(result.insertedCount > 0)
+    })
+})
+app.get('/orders',(req,res)=>{
+    const queryEmail = req.query.email;
+    orderedCollection.find({email:queryEmail})
+            .toArray((err,documents)=>{
+               res.send(documents)
+            })
+      
+})
+});
+
 app.listen(port)
