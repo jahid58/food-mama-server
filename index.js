@@ -4,7 +4,7 @@ const cors = require('cors')
 const app =express()
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID;
-const port = process.env.DB_PORT || 5000;
+const port =process.env.PORT || 5000 || 5000;
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors());
