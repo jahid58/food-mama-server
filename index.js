@@ -4,12 +4,11 @@ const cors = require('cors')
 const app =express()
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID;
-const port =process.env.PORT || 5000 || 5000;
+const port =process.env.PORT || 5000;
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors());
 require('dotenv').config()
-console.log(process.env.DB_USER,process.env.DB_PASS,process.env.DB_NAME)
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ntakd.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -49,8 +48,11 @@ app.get('/orders',(req,res)=>{
                res.send(documents)
             })
 })
-app.get('/',(req,res)=>{
-  res.send('working')
+app.delete('/delete/:id',(req,res)=>{
+  foodCollection.deleteOne({_id:ObjectID(req.params.id)})
+  .then(result=>{
+       res.send(result.deletedCount > 0)
+  })
 })
 });
 
