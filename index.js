@@ -9,16 +9,15 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors());
 require('dotenv').config()
+console.log(process.env.DB_USER,process.env.DB_PASS,process.env.DB_NAME)
 
-
-
-console.log(process.env.DB_NAME,process.env.DB_USER,process.env.DB_PASS)
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ntakd.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   const foodCollection = client.db(process.env.DB_NAME).collection("foods");
   const orderedCollection = client.db(process.env.DB_NAME).collection('orders');
-app.post('/addFood',(req,res)=>{
+
+  app.post('/addFood',(req,res)=>{
     const food = req.body;
     foodCollection.insertOne(food)
     .then(result=>res.send(result.insertedCount > 0))
@@ -49,7 +48,9 @@ app.get('/orders',(req,res)=>{
             .toArray((err,documents)=>{
                res.send(documents)
             })
-      
+})
+app.get('/',(req,res)=>{
+  res.send('working')
 })
 });
 

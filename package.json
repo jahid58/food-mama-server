@@ -1,5 +1,5 @@
 {
-  "name": "deshi-fashion-server",
+  "name": "food-mama-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -19,5 +19,13 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Porgramming-Hero-web-course/full-stack-server-jahid58.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Porgramming-Hero-web-course/full-stack-server-jahid58/issues"
+  },
+  "homepage": "https://github.com/Porgramming-Hero-web-course/full-stack-server-jahid58#readme"
 }
